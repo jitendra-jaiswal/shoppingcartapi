@@ -2,11 +2,6 @@
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.Responses;
 using ShoppingCart.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Business
 {
@@ -42,7 +37,7 @@ namespace ShoppingCart.Business
         public bool UpdateProductInCart(Product product, int userId, int quantity)
         {
             var item = _cartRepository.GetFirstOrDefault(x => x.UserId == userId && x.ProductId == product.ProductCode);
-            if(item == null)
+            if (item == null)
             {
                 return AddProductToCart(product, userId, quantity);
             };
@@ -54,7 +49,7 @@ namespace ShoppingCart.Business
         public bool RemoveProductToCart(int userId, string productCode)
         {
             var cartItem = _cartRepository.GetFirstOrDefault(x => x.UserId == userId && x.ProductId == productCode);
-            if(cartItem == null)
+            if (cartItem == null)
             {
                 // No Product to delete
                 return true;
@@ -68,17 +63,17 @@ namespace ShoppingCart.Business
             CartModel response = new CartModel();
 
             var cartItems = _cartRepository.GetAll(x => x.UserId == userId);
-            if( cartItems == null)
+            if (cartItems == null)
             {
                 return response;
             }
 
-            response.CartItems = cartItems.Select(x=> new Domain.CartItemModel
+            response.CartItems = cartItems.Select(x => new Domain.CartItemModel
             {
                 ProductCode = x.ProductId,
                 UnitPrice = x.UnitPrice,
                 Quantity = x.Quantity,
-                TotalAmountBeforeDiscount = x.UnitPrice*x.Quantity
+                TotalAmountBeforeDiscount = x.UnitPrice * x.Quantity
             }).ToList();
             response.TotalAmount = response.CartItems.Sum(x => x.TotalAmountBeforeDiscount);
             response.TotalDiscount = response.CartItems.Sum(x => x.Discount ?? 0);

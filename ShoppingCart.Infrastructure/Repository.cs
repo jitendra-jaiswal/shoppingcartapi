@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Infrastructure
 {
@@ -21,7 +16,7 @@ namespace ShoppingCart.Infrastructure
         {
             IQueryable<TEntity> query = _dbSet;
 
-            if(filter != null)
+            if (filter != null)
                 query = query.Where(filter);
 
             return query.ToList();

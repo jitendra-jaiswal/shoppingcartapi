@@ -52,7 +52,7 @@ namespace ShoppingCartApi.Controllers
                 response.ErrorMessage = "ErrorOccurred while saving item in cart";
                 return StatusCode(500, response);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 response.ErrorMessage = e.Message;
                 return StatusCode(500, response);

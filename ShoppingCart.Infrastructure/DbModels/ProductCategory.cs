@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ShoppingCart.Infrastructure;
+﻿namespace ShoppingCart.Infrastructure;
 
 public partial class ProductCategory
 {

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ShoppingCart.Infrastructure;
 
 public partial class EcommerceContext : DbContext
-{ 
+{
     public EcommerceContext(DbContextOptions<EcommerceContext> options)
         : base(options)
     {
