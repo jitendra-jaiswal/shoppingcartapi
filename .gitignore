@@ -1,0 +1,4 @@
+.vs
+/ShoppingCartApi/bin/*
+/ShoppingCartApi/obj/*
+/ShoppingCart.Business/bin/Debug/*
