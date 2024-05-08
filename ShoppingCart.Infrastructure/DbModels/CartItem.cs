@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ShoppingCart.Infrastructure;
 
-public partial class Cart
+public partial class CartItem
 {
     public int Id { get; set; }
 
@@ -14,8 +14,4 @@ public partial class Cart
     public decimal UnitPrice { get; set; }
 
     public int Quantity { get; set; }
-
-    public decimal? Discount { get; set; }
-
-    public string? DiscountCode { get; set; }
 }

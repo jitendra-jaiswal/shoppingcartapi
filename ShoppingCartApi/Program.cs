@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Business;
+using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<EcommerceContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("EcommerceContext")), ServiceLifetime.Scoped);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddTransient<ICartService, CartService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

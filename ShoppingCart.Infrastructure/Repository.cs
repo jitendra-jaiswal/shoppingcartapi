@@ -49,6 +49,8 @@ namespace ShoppingCart.Infrastructure
         public int Remove(object id)
         {
             TEntity entity = _dbSet.Find(id);
+            if (entity == null)
+                return 0;
             _dbSet.Remove(entity);
             return Save();
         }
