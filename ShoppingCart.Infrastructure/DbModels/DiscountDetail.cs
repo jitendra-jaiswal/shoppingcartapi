@@ -29,4 +29,6 @@ public partial class DiscountDetail
     public int? LimitforPeriod { get; set; }
 
     public string? Special { get; set; }
+
+    public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 }

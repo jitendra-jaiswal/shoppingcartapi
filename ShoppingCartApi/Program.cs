@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Business;
+using ShoppingCart.Business.Factories;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Infrastructure;
 
@@ -12,7 +13,9 @@ builder.Services.AddDbContext<EcommerceContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("EcommerceContext")), ServiceLifetime.Scoped);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddTransient<ICartService, CartService>();
-
+builder.Services.AddTransient<IDiscountService, DiscountService>();
+builder.Services.AddSingleton<ICacheService, CacheService>();
+builder.Services.AddScoped<IDiscountCouponFactory, DiscountCouponFactory>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

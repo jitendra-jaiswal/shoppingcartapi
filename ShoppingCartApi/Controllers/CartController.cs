@@ -13,11 +13,11 @@ namespace ShoppingCartApi.Controllers
     public class CartController : ControllerBase
     {
         private readonly ILogger<CartController> _logger;
-        private readonly IRepository<Product> _productsRepository;
+        private readonly IDiscountService _discountService;
         private readonly ICartService _cartService;
-        public CartController(ILogger<CartController> logger, IRepository<Product> productsRepository, ICartService cartService)
+        public CartController(ILogger<CartController> logger, IDiscountService discountService, ICartService cartService)
         {
-            _productsRepository = productsRepository; ;
+            _discountService = discountService;
             _logger = logger;
             _cartService = cartService;
         }
@@ -26,7 +26,19 @@ namespace ShoppingCartApi.Controllers
         [HttpGet]
         public CartModel Get(int userid)
         {
-            return _cartService.GetCart(userid);
+            var cart = _cartService.GetCart(userid);
+            if (cart.CartItems.Any())
+            {
+                var discounts = _discountService.GetAllDiscountCoupons();
+                if(discounts.Any())
+                {
+                    _discountService.ApplyDiscounts(cart, discounts);
+                }
+            }
+            cart.TotalAmount = cart.CartItems.Sum(x => x.TotalAmountBeforeDiscount);
+            cart.TotalDiscount = cart.CartItems.Sum(x => x.Discount ?? 0);
+            cart.TotalNetAmount = cart.TotalAmount - cart.TotalDiscount;
+            return cart;
         }
 
         // POST api/<CartController>

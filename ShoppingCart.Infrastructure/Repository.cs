@@ -12,12 +12,17 @@ namespace ShoppingCart.Infrastructure
             _context = context;
             _dbSet = _context.Set<TEntity>();
         }
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
+        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, List<Expression<Func<TEntity, object>>> includes = null)
         {
             IQueryable<TEntity> query = _dbSet;
 
             if (filter != null)
                 query = query.Where(filter);
+
+            if (includes != null)
+            {
+                includes.ForEach(x => query.Include(x).Load());
+            }
 
             return query.ToList();
         }

@@ -9,7 +9,7 @@ public partial class EcommerceContext : DbContext
     {
     }
 
-    public virtual DbSet<CartItem> CartItems { get; set; }
+    public virtual DbSet<CartItem> Carts { get; set; }
 
     public virtual DbSet<Discount> Discounts { get; set; }
 
@@ -23,17 +23,22 @@ public partial class EcommerceContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CartItem>(entity =>
         {
-            entity
-                .ToTable("Cart");
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.ToTable("Cart");
+
             entity.Property(e => e.ProductId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.UnitPrice).HasColumnType("decimal(10, 2)");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Cart_User");
         });
 
         modelBuilder.Entity<Discount>(entity =>
@@ -43,6 +48,16 @@ public partial class EcommerceContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.DiscountDetailsNavigation).WithMany(p => p.Discounts)
+                .HasForeignKey(d => d.DiscountDetails)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Discounts_DiscountDetails");
+
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Discounts)
+                .HasForeignKey(d => d.Type)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Discounts_DiscountType");
         });
 
         modelBuilder.Entity<DiscountDetail>(entity =>

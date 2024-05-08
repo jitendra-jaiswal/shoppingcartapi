@@ -75,9 +75,6 @@ namespace ShoppingCart.Business
                 Quantity = x.Quantity,
                 TotalAmountBeforeDiscount = x.UnitPrice * x.Quantity
             }).ToList();
-            response.TotalAmount = response.CartItems.Sum(x => x.TotalAmountBeforeDiscount);
-            response.TotalDiscount = response.CartItems.Sum(x => x.Discount ?? 0);
-            response.TotalNetAmount = response.TotalAmount - response.TotalDiscount;
             return response;
         }
     }

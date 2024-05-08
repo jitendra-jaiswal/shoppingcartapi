@@ -5,7 +5,7 @@ namespace ShoppingCart.Infrastructure
     public interface IRepository<TEntity>
     {
 
-        List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null);
+        List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, List<Expression<Func<TEntity, object>>> includes = null);
 
         TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> filter = null);
 
