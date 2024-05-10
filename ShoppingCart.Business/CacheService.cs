@@ -1,4 +1,5 @@
 ﻿using ShoppingCart.Business.Interfaces;
+using ShoppingCart.Infrastructure;
 
 namespace ShoppingCart.Business
 {
@@ -25,6 +26,9 @@ namespace ShoppingCart.Business
 
         public List<IDiscountCoupon> GetDiscountCoupons()
         {
+            if (coupons == null)
+                return null;
+
             return coupons;
         }
 
@@ -37,6 +41,7 @@ namespace ShoppingCart.Business
         public bool SetDiscountCoupons(List<IDiscountCoupon> coupons)
         {
             this.coupons = coupons;
+            SetCacheValue("Discount_LastCachedDateTime", DateTime.Now.ToString());
             return true;
         }
     }

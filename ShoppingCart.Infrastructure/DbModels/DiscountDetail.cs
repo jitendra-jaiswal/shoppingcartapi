@@ -1,4 +1,6 @@
-﻿namespace ShoppingCart.Infrastructure;
+﻿using System.Text.Json.Serialization;
+
+namespace ShoppingCart.Infrastructure;
 
 public partial class DiscountDetail
 {
@@ -30,5 +32,6 @@ public partial class DiscountDetail
 
     public string? Special { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 }

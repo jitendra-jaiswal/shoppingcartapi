@@ -2,6 +2,7 @@
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.enums;
 using ShoppingCart.Infrastructure;
+using System.Text.Json;
 
 namespace ShoppingCart.Business.Factories
 {
