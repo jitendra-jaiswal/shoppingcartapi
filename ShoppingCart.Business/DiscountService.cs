@@ -6,7 +6,6 @@ using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain;
 using ShoppingCart.Domain.Responses;
 using ShoppingCart.Infrastructure;
-using System.Text.Json;
 
 namespace ShoppingCart.Business
 {
@@ -78,13 +77,13 @@ namespace ShoppingCart.Business
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Some error occurred while identifying id can use cache. 
                 // Fallback Generate coupons
                 return false;
             }
-            
+
         }
 
         private async Task<List<IDiscountCoupon>> BuildCouponsandStoreinCache()
@@ -109,7 +108,7 @@ namespace ShoppingCart.Business
                     discountResults.Add(discountResult);
             }
 
-            discountResults.ForEach(async x => await AppyDiscountonCartItems(cart, x));           
+            discountResults.ForEach(async x => await AppyDiscountonCartItems(cart, x));
         }
         private async Task AppyDiscountonCartItems(CartModel cart, DiscountResult discount)
         {

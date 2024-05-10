@@ -1,5 +1,4 @@
 ﻿using ShoppingCart.Business.Interfaces;
-using ShoppingCart.Infrastructure;
 
 namespace ShoppingCart.Business
 {
