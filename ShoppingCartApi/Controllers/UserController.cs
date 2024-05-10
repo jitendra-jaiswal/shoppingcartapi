@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.Business.Interfaces;
+using ShoppingCart.Domain.Requests;
 using ShoppingCart.Domain.Responses;
 
 namespace ShoppingCartApi.Controllers
@@ -7,15 +11,35 @@ namespace ShoppingCartApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public UserController()
+        private readonly ITokenService _tokenService;
+        public UserController(ITokenService tokenService)
         {
-                
+            _tokenService = tokenService;
         }
 
-        [HttpGet]
-        public string Get(int userid)
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Login")]
+        public ActionResult<LoginResponse> Login(LoginModel loginRequest)
         {
-            return "Hello";
+            LoginResponse response = new() { IsSuccess = false };
+            try
+            {
+                var user = _tokenService.ValidateUser(loginRequest);
+                if (user == null)
+                {
+                    response.ErrorMessage = "Invadlid Credentials";
+                    return BadRequest(response);
+                }
+
+                response.Token = _tokenService.GenerateToken(user);
+                response.IsSuccess = true;
+                return Ok(response);
+            }catch(Exception ex)
+            {
+                response.ErrorMessage = ex.Message;
+            }
+            return StatusCode(500, response);
         }
     }
 }

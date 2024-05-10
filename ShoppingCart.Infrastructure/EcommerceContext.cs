@@ -10,7 +10,7 @@ public partial class EcommerceContext : DbContext
     }
 
     public virtual DbSet<CartItem> Carts { get; set; }
-
+    public virtual DbSet<Config> Configs { get; set; }
     public virtual DbSet<Discount> Discounts { get; set; }
 
     public virtual DbSet<DiscountDetail> DiscountDetails { get; set; }
@@ -41,9 +41,26 @@ public partial class EcommerceContext : DbContext
                 .HasConstraintName("FK_Cart_User");
         });
 
+        modelBuilder.Entity<Config>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Config");
+
+            entity.Property(e => e.Key)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("key");
+            entity.Property(e => e.Value)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("value");
+        });
+
         modelBuilder.Entity<Discount>(entity =>
         {
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.DetailsJson).IsUnicode(false);
             entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -123,7 +140,14 @@ public partial class EcommerceContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.Password)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Role)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -1,4 +1,7 @@
-﻿namespace ShoppingCart.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ShoppingCart.Infrastructure;
 
 public partial class Discount
 {
@@ -9,6 +12,8 @@ public partial class Discount
     public int Type { get; set; }
 
     public int DiscountDetails { get; set; }
+
+    public string? DetailsJson { get; set; }
 
     public bool IsActive { get; set; }
 

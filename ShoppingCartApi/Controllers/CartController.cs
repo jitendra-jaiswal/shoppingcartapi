@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.Business.Attributes;
 using ShoppingCart.Business.Interfaces;
+using ShoppingCart.Domain.enums;
 using ShoppingCart.Domain.Models;
 using ShoppingCart.Domain.Responses;
 using ShoppingCart.Infrastructure;
@@ -8,8 +10,9 @@ using ShoppingCart.Infrastructure;
 
 namespace ShoppingCartApi.Controllers
 {
-    [Route("api/v1/[controller]/{userid}")]
+    [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorization(UserRoles.User)]
     public class CartController : ControllerBase
     {
         private readonly ILogger<CartController> _logger;
@@ -24,8 +27,9 @@ namespace ShoppingCartApi.Controllers
 
         // GET: api/<CartController>
         [HttpGet]
-        public CartModel Get(int userid)
+        public CartModel Get()
         {
+            Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
             var cart = _cartService.GetCart(userid);
             if (cart.CartItems.Any())
             {
@@ -43,12 +47,12 @@ namespace ShoppingCartApi.Controllers
 
         // POST api/<CartController>
         [HttpPost]
-        public ActionResult<Response> Post(int userid, [FromBody] ProductOrder order)
+        public ActionResult<Response> Post([FromBody] ProductOrder order)
         {
             Response response = new() { IsSuccess = false };
             try
             {
-
+                Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
                 var product = _cartService.GetProductfromDB(order.ProductCode);
                 if (product == null)
                 {
@@ -73,12 +77,12 @@ namespace ShoppingCartApi.Controllers
 
         // PUT api/<CartController>/5
         [HttpPut()]
-        public ActionResult<Response> Put(int userid, [FromBody] ProductOrder order)
+        public ActionResult<Response> Put([FromBody] ProductOrder order)
         {
             Response response = new() { IsSuccess = false };
             try
             {
-
+                Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
                 var product = _cartService.GetProductfromDB(order.ProductCode);
                 if (product == null)
                 {
@@ -103,11 +107,12 @@ namespace ShoppingCartApi.Controllers
 
         // DELETE api/<CartController>/5
         [HttpDelete("{productid}")]
-        public ActionResult<Response> Delete(int userid, string productid)
+        public ActionResult<Response> Delete(string productid)
         {
             Response response = new() { IsSuccess = false };
             try
             {
+                Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
                 if (_cartService.RemoveProductToCart(userid, productid))
                 {
                     response.IsSuccess = true;
