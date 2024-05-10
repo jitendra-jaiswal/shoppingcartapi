@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ShoppingCart.Business.Factories;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain;
+using ShoppingCart.Domain.Requests;
 using ShoppingCart.Domain.Responses;
 using ShoppingCart.Infrastructure;
 
@@ -28,11 +29,33 @@ namespace ShoppingCart.Business
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<DiscountModel>> GetAllActiveDiscounts()
+        public async Task<DiscountModel> GetDiscounts(int id)
+        {
+            DiscountModel discountModel = new();
+            DateTime today = DateTime.Now;
+            var discount = _discountRepository.GetFirstOrDefault(x=> x.Id == id);
+            if(discount != null)
+            {
+                discountModel = _mapper.Map<DiscountModel>(discount);
+                discountModel.discountDetail = JsonConvert.DeserializeObject<DiscountDetail>(discountModel.DetailsJson);
+            }
+            return await Task.FromResult(discountModel);
+            
+        }
+
+        public async Task<IEnumerable<DiscountModel>> GetAllActiveDiscounts(bool includeType = true)
         {
             List<DiscountModel> discountModels = new();
+            List<Discount> discounts;
             DateTime today = DateTime.Now;
-            var discounts = _discountRepository.GetAll(x => x.IsActive == true && today >= x.CreatedDate && today <= x.ExpiryDate, new List<System.Linq.Expressions.Expression<Func<Discount, object>>> { x => x.TypeNavigation });
+            if (includeType)
+            {
+                discounts = _discountRepository.GetAll(x => x.IsActive == true && today >= x.CreatedDate && today <= x.ExpiryDate, new List<System.Linq.Expressions.Expression<Func<Discount, object>>> { x => x.TypeNavigation });
+            }
+            else
+            {
+                discounts = _discountRepository.GetAll(x => x.IsActive == true && today >= x.CreatedDate && today <= x.ExpiryDate);
+            }
 
             foreach (var discount in discounts)
             {
@@ -52,6 +75,72 @@ namespace ShoppingCart.Business
 
             return await BuildCouponsandStoreinCache();
         }
+
+        public async Task ApplyDiscounts(CartModel cart, List<IDiscountCoupon> coupons)
+        {
+            List<DiscountResult> discountResults = new();
+            foreach (var item in cart.CartItems)
+            {
+                DiscountResult discountResult = await ProceessDiscountforItem(cart, coupons, item);
+                if (discountResult != null)
+                    discountResults.Add(discountResult);
+            }
+
+            discountResults.ForEach(async x => await AppyDiscountonCartItems(cart, x));
+        }
+
+        public bool DisableDiscount(int id)
+        {
+            var discount = _discountRepository.GetFirstOrDefault(x => x.Id == id);
+            if (discount == null)
+                return false;
+
+            discount.IsActive = false;
+            _discountRepository.Update(discount);
+
+            var config = _configRepository.GetFirstOrDefault(x => x.Key == "DiscountSetDate");
+            config.Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            _configRepository.Update(config);
+
+            return true;
+        }
+
+        public bool DeleteDiscount(int id)
+        {
+            var discount = _discountRepository.GetFirstOrDefault(x => x.Id == id);
+            if (discount == null)
+                return false;
+
+            _discountRepository.Remove(discount);
+
+            var config = _configRepository.GetFirstOrDefault(x => x.Key == "DiscountSetDate");
+            config.Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            _configRepository.Update(config);
+
+            return true;
+        }
+
+        public bool AddDiscount(AddDiscountModel model)
+        {
+            Discount discount = new Discount
+            {
+                Name = model.Name,
+                Type = model.Type,
+                IsActive = model.IsActive,
+                CreatedDate = DateTime.Now,
+                ExpiryDate = model.ExpiryDate,
+                DetailsJson = JsonConvert.SerializeObject(model.DiscountDetail)
+            };
+
+            _discountRepository.Insert(discount);
+            var config = _configRepository.GetFirstOrDefault(x => x.Key == "DiscountSetDate");
+            config.Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            _configRepository.Update(config);
+
+            return true;
+        }
+
+        #region private 
 
         private bool ShouldUseCacheCoupons()
         {
@@ -98,18 +187,7 @@ namespace ShoppingCart.Business
             return discountCoupons;
         }
 
-        public async Task ApplyDiscounts(CartModel cart, List<IDiscountCoupon> coupons)
-        {
-            List<DiscountResult> discountResults = new();
-            foreach (var item in cart.CartItems)
-            {
-                DiscountResult discountResult = await ProceessDiscountforItem(cart, coupons, item);
-                if (discountResult != null)
-                    discountResults.Add(discountResult);
-            }
-
-            discountResults.ForEach(async x => await AppyDiscountonCartItems(cart, x));
-        }
+        
         private async Task AppyDiscountonCartItems(CartModel cart, DiscountResult discount)
         {
             if (discount.DiscountAmount == 0)
@@ -154,5 +232,7 @@ namespace ShoppingCart.Business
             }
             return discountResult;
         }
+
+        #endregion
     }
 }

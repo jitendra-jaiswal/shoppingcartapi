@@ -41,9 +41,7 @@ public partial class EcommerceContext : DbContext
 
         modelBuilder.Entity<Config>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Config");
+            entity.ToTable("Config");
 
             entity.Property(e => e.Key)
                 .HasMaxLength(200)
