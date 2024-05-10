@@ -8,8 +8,6 @@ public partial class Discount
 
     public int Type { get; set; }
 
-    public int DiscountDetails { get; set; }
-
     public string? DetailsJson { get; set; }
 
     public bool IsActive { get; set; }
@@ -17,8 +15,6 @@ public partial class Discount
     public DateTime CreatedDate { get; set; }
 
     public DateTime ExpiryDate { get; set; }
-
-    public virtual DiscountDetail DiscountDetailsNavigation { get; set; } = null!;
 
     public virtual DiscountType TypeNavigation { get; set; } = null!;
 }

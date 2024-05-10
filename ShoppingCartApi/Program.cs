@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ShoppingCart.Business;
+using ShoppingCart.Business.AutoMapper;
 using ShoppingCart.Business.Factories;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Business.Middleware;
@@ -19,6 +20,7 @@ builder.Services.AddTransient<IDiscountService, DiscountService>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddScoped<IDiscountCouponFactory, DiscountCouponFactory>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(swagger =>

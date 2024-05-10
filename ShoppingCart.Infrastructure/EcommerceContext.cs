@@ -13,8 +13,6 @@ public partial class EcommerceContext : DbContext
     public virtual DbSet<Config> Configs { get; set; }
     public virtual DbSet<Discount> Discounts { get; set; }
 
-    public virtual DbSet<DiscountDetail> DiscountDetails { get; set; }
-
     public virtual DbSet<DiscountType> DiscountTypes { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -66,35 +64,10 @@ public partial class EcommerceContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.DiscountDetailsNavigation).WithMany(p => p.Discounts)
-                .HasForeignKey(d => d.DiscountDetails)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Discounts_DiscountDetails");
-
             entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Discounts)
                 .HasForeignKey(d => d.Type)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Discounts_DiscountType");
-        });
-
-        modelBuilder.Entity<DiscountDetail>(entity =>
-        {
-            entity.Property(e => e.Condition).HasMaxLength(500);
-            entity.Property(e => e.FixedDiscount).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.FixedPrice).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.FreeItem)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.MaxDiscount).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.OnItem)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.ProductCode)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Special)
-                .HasMaxLength(200)
-                .IsUnicode(false);
         });
 
         modelBuilder.Entity<DiscountType>(entity =>

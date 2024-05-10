@@ -12,11 +12,11 @@ namespace ShoppingCart.Business.DiscountStrategies
         public string OnProductCode { get; set; }
         public int? Limit { get; set; }
         public string Special { get; set; }
-        public BOGO_DiscountStrategy(Discount discount)
+        public BOGO_DiscountStrategy(DiscountModel discount)
         {
-            this.ProductCode = discount.DiscountDetailsNavigation.ProductCode;
-            this.Limit = discount.DiscountDetailsNavigation.LimitCheckout;
-            this.Special = discount.DiscountDetailsNavigation.Special;
+            this.ProductCode = discount.discountDetail.ProductCode;
+            this.Limit = discount.discountDetail.LimitCheckout;
+            this.Special = discount.discountDetail.Special;
             this.DiscountCode = discount.Name;
             this.OnProductCode = this.OnProductCode;
         }

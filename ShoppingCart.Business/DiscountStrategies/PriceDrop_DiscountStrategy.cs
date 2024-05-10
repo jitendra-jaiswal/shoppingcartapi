@@ -13,13 +13,13 @@ namespace ShoppingCart.Business.DiscountStrategies
         public int MinQuantity { get; set; }
         public string OnItemCode { get; set; }
         public decimal? FixedPrice { get; set; }
-        public PriceDrop_DiscountStrategy(Discount discount)
+        public PriceDrop_DiscountStrategy(DiscountModel discount)
         {
-            this.ProductCode = discount.DiscountDetailsNavigation.ProductCode;
-            this.Special = discount.DiscountDetailsNavigation.Special;
-            this.MinQuantity = discount.DiscountDetailsNavigation.MinimumQuantity ?? 0;
-            this.OnItemCode = discount.DiscountDetailsNavigation.ProductCode;
-            this.FixedPrice = discount.DiscountDetailsNavigation.FixedPrice;
+            this.ProductCode = discount.discountDetail.ProductCode;
+            this.Special = discount.discountDetail.Special;
+            this.MinQuantity = discount.discountDetail.MinimumQuantity ?? 0;
+            this.OnItemCode = discount.discountDetail.ProductCode;
+            this.FixedPrice = discount.discountDetail.FixedPrice;
             this.DiscountCode = discount.Name;
         }
 

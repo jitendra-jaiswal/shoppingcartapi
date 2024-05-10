@@ -1,5 +1,6 @@
 ﻿using ShoppingCart.Business.DiscountStrategies;
 using ShoppingCart.Business.Interfaces;
+using ShoppingCart.Domain;
 using ShoppingCart.Domain.enums;
 using ShoppingCart.Infrastructure;
 using System.Text.Json;
@@ -8,14 +9,14 @@ namespace ShoppingCart.Business.Factories
 {
     public interface IDiscountCouponFactory
     {
-        List<IDiscountCoupon> BuildDiscountCoupons(IEnumerable<Discount> discounts);
+        List<IDiscountCoupon> BuildDiscountCoupons(IEnumerable<DiscountModel> discounts);
     }
     public class DiscountCouponFactory : IDiscountCouponFactory
     {
         List<IDiscountCoupon> coupons = new();
-        public List<IDiscountCoupon> BuildDiscountCoupons(IEnumerable<Discount> discounts)
+        public List<IDiscountCoupon> BuildDiscountCoupons(IEnumerable<DiscountModel> discounts)
         {
-            foreach (Discount discount in discounts)
+            foreach (DiscountModel discount in discounts)
             {
                 var discountStrategy = CreateCoupon(discount);
                 if (discountStrategy != null)
@@ -25,7 +26,7 @@ namespace ShoppingCart.Business.Factories
             }
             return coupons;
         }
-        private IDiscountCoupon CreateCoupon(Discount discount)
+        private IDiscountCoupon CreateCoupon(DiscountModel discount)
         {
             switch ((DiscountTypes)discount.Type)
             {

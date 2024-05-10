@@ -13,13 +13,13 @@ namespace ShoppingCart.Business.DiscountStrategies
         public string Special { get; set; }
         public int MinQuantity { get; set; }
         public string FreeProductCode { get; set; }
-        public FreeItemDiscountStrategy(Discount discount)
+        public FreeItemDiscountStrategy(DiscountModel discount)
         {
-            this.ProductCode = discount.DiscountDetailsNavigation.ProductCode;
-            this.Limit = discount.DiscountDetailsNavigation.LimitCheckout ?? 0;
-            this.Special = discount.DiscountDetailsNavigation.Special ?? "";
-            this.MinQuantity = discount.DiscountDetailsNavigation.MinimumQuantity ?? 0;
-            this.FreeProductCode = discount.DiscountDetailsNavigation.FreeItem;
+            this.ProductCode = discount.discountDetail.ProductCode;
+            this.Limit = discount.discountDetail.LimitCheckout ?? 0;
+            this.Special = discount.discountDetail.Special ?? "";
+            this.MinQuantity = discount.discountDetail.MinimumQuantity ?? 0;
+            this.FreeProductCode = discount.discountDetail.FreeItem;
             this.DiscountCode = discount.Name;
         }
 

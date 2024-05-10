@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ShoppingCart.Business.Factories;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain;
@@ -15,20 +17,32 @@ namespace ShoppingCart.Business
         private readonly ICacheService _cache;
         private readonly IDiscountCouponFactory _couponFactory;
         private readonly IRepository<Config> _configRepository;
-        public DiscountService(ILogger<DiscountService> logger, IRepository<Discount> discountRepository, ICacheService cache, IDiscountCouponFactory couponFactory, IRepository<Config> configRepository)
+        private readonly IMapper _mapper;
+        public DiscountService(ILogger<DiscountService> logger, IRepository<Discount> discountRepository, ICacheService cache, IDiscountCouponFactory couponFactory, IRepository<Config> configRepository,
+            IMapper mapper)
         {
             _logger = logger;
             _discountRepository = discountRepository;
             _cache = cache;
             _couponFactory = couponFactory;
             _configRepository = configRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Discount>> GetAllActiveDiscounts()
+        public async Task<IEnumerable<DiscountModel>> GetAllActiveDiscounts()
         {
+            List<DiscountModel> discountModels = new();
             DateTime today = DateTime.Now;
-            var discounts = _discountRepository.GetAll(x => x.IsActive == true && today >= x.CreatedDate && today <= x.ExpiryDate, new List<System.Linq.Expressions.Expression<Func<Discount, object>>> { x => x.DiscountDetailsNavigation, x => x.TypeNavigation });
-            return await Task.FromResult(discounts);
+            var discounts = _discountRepository.GetAll(x => x.IsActive == true && today >= x.CreatedDate && today <= x.ExpiryDate, new List<System.Linq.Expressions.Expression<Func<Discount, object>>> { x => x.TypeNavigation });
+
+            foreach (var discount in discounts)
+            {
+                DiscountModel discountModel = _mapper.Map<DiscountModel>(discount);
+                discountModel.discountDetail = JsonConvert.DeserializeObject<DiscountDetail>(discountModel.DetailsJson);
+                discountModels.Add(discountModel);
+            }
+
+            return await Task.FromResult(discountModels);
         }
 
         public async Task<List<IDiscountCoupon>> GetAllDiscountCoupons()

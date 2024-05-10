@@ -14,14 +14,14 @@ namespace ShoppingCart.Business.DiscountStrategies
         public int? MinQuantity { get; set; }
         public string OnItemCode { get; set; }
         public int PercentageDiscount { get; set; }
-        public Percentage_DiscountStrategy(Discount discount)
+        public Percentage_DiscountStrategy(DiscountModel discount)
         {
-            this.ProductCode = discount.DiscountDetailsNavigation.ProductCode;
-            this.Limit = discount.DiscountDetailsNavigation.LimitCheckout ?? 0;
-            this.Special = discount.DiscountDetailsNavigation.Special;
-            this.MinQuantity = discount.DiscountDetailsNavigation.MinimumQuantity ?? 0;
-            this.OnItemCode = discount.DiscountDetailsNavigation.OnItem ?? discount.DiscountDetailsNavigation.ProductCode;
-            this.PercentageDiscount = discount.DiscountDetailsNavigation.PercentageDiscount ?? 0;
+            this.ProductCode = discount.discountDetail.ProductCode;
+            this.Limit = discount.discountDetail.LimitCheckout ?? 0;
+            this.Special = discount.discountDetail.Special;
+            this.MinQuantity = discount.discountDetail.MinimumQuantity ?? 0;
+            this.OnItemCode = discount.discountDetail.OnItem ?? discount.discountDetail.ProductCode;
+            this.PercentageDiscount = discount.discountDetail.PercentageDiscount ?? 0;
             this.DiscountCode = discount.Name;
         }
 
