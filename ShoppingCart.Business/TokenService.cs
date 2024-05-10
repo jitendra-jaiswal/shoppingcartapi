@@ -3,13 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.Requests;
 using ShoppingCart.Infrastructure;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Business
 {
@@ -23,12 +19,12 @@ namespace ShoppingCart.Business
             _configuration = configuration;
         }
 
-        public User ValidateUser(LoginModel loginModel)
+        public async Task<User> ValidateUser(LoginModel loginModel)
         {
             if (loginModel == null || string.IsNullOrWhiteSpace(loginModel.username))
                 return null;
-            
-            return _userRepository.GetFirstOrDefault(x => x.Name == loginModel.username);
+
+            return await Task.FromResult(_userRepository.GetFirstOrDefault(x => x.Name == loginModel.username));
         }
 
         public string GenerateToken(User user)

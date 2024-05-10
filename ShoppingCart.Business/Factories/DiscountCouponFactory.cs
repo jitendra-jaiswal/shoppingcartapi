@@ -2,11 +2,6 @@
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.enums;
 using ShoppingCart.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Business.Factories
 {
@@ -14,15 +9,15 @@ namespace ShoppingCart.Business.Factories
     {
         List<IDiscountCoupon> BuildDiscountCoupons(IEnumerable<Discount> discounts);
     }
-    public class DiscountCouponFactory: IDiscountCouponFactory
+    public class DiscountCouponFactory : IDiscountCouponFactory
     {
         List<IDiscountCoupon> coupons = new();
         public List<IDiscountCoupon> BuildDiscountCoupons(IEnumerable<Discount> discounts)
         {
-            foreach(Discount discount in discounts)
+            foreach (Discount discount in discounts)
             {
                 var discountStrategy = CreateCoupon(discount);
-                if(discountStrategy != null)
+                if (discountStrategy != null)
                 {
                     coupons.Add(discountStrategy);
                 }
@@ -43,6 +38,6 @@ namespace ShoppingCart.Business.Factories
                     return new PriceDrop_DiscountStrategy(discount);
             }
             return null;
-        } 
+        }
     }
 }

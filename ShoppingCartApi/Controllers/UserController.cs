@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.Requests;
@@ -20,12 +19,12 @@ namespace ShoppingCartApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Login")]
-        public ActionResult<LoginResponse> Login(LoginModel loginRequest)
+        public async Task<ActionResult<LoginResponse>> Login(LoginModel loginRequest)
         {
             LoginResponse response = new() { IsSuccess = false };
             try
             {
-                var user = _tokenService.ValidateUser(loginRequest);
+                var user = await _tokenService.ValidateUser(loginRequest);
                 if (user == null)
                 {
                     response.ErrorMessage = "Invadlid Credentials";
@@ -35,7 +34,8 @@ namespace ShoppingCartApi.Controllers
                 response.Token = _tokenService.GenerateToken(user);
                 response.IsSuccess = true;
                 return Ok(response);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 response.ErrorMessage = ex.Message;
             }

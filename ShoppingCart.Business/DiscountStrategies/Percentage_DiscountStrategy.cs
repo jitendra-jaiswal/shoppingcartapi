@@ -2,15 +2,10 @@
 using ShoppingCart.Domain;
 using ShoppingCart.Domain.Responses;
 using ShoppingCart.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Business.DiscountStrategies
 {
-    public class Percentage_DiscountStrategy: IDiscountCoupon
+    public class Percentage_DiscountStrategy : IDiscountCoupon
     {
         public string DiscountCode { get; set; }
         public string ProductCode { get; set; }
@@ -50,8 +45,8 @@ namespace ShoppingCart.Business.DiscountStrategies
             }
             else
             {
-                
-                result.DiscountAmount = Limit == 0? discountedCartItem.UnitPrice * (this.PercentageDiscount*(decimal)0.01)*discountedCartItem.Quantity: discountedCartItem.UnitPrice * (this.PercentageDiscount *(decimal)0.01) * Limit;
+
+                result.DiscountAmount = Limit == 0 ? discountedCartItem.UnitPrice * (this.PercentageDiscount * (decimal)0.01) * discountedCartItem.Quantity : discountedCartItem.UnitPrice * (this.PercentageDiscount * (decimal)0.01) * Limit;
                 result.DiscountCode = this.DiscountCode;
                 result.OnProductCode = this.OnItemCode;
             }

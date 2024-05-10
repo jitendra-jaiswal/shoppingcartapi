@@ -24,7 +24,7 @@ namespace ShoppingCart.Business.Middleware
             {
                 //Validate Token
                 bool isTokenValid = ParseToken(context, token);
-                if(!isTokenValid)
+                if (!isTokenValid)
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return;

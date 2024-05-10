@@ -33,38 +33,38 @@ namespace ShoppingCart.Infrastructure
             return query.FirstOrDefault(filter);
         }
 
-        public int Insert(TEntity entity)
+        public async Task<int> Insert(TEntity entity)
         {
             _dbSet.Add(entity);
-            return Save();
+            return await Save();
 
         }
 
-        public int Remove(TEntity entity)
+        public async Task<int> Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
-            return Save();
+            return await Save();
         }
 
-        public int Remove(object id)
+        public async Task<int> Remove(object id)
         {
             TEntity entity = _dbSet.Find(id);
             if (entity == null)
                 return 0;
             _dbSet.Remove(entity);
-            return Save();
+            return await Save();
         }
 
-        public int Save()
+        public async Task<int> Save()
         {
-            return _context.SaveChanges();
+            return await Task.FromResult(_context.SaveChanges(true));
         }
 
-        public int Update(TEntity entity)
+        public async Task<int> Update(TEntity entity)
         {
             _dbSet.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
-            return Save();
+            return await Save();
         }
     }
 }

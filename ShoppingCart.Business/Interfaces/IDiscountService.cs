@@ -5,8 +5,8 @@ namespace ShoppingCart.Business.Interfaces
 {
     public interface IDiscountService
     {
-        IEnumerable<Discount> GetAllActiveDiscounts();
-        List<IDiscountCoupon> GetAllDiscountCoupons();
-        void ApplyDiscounts(CartModel cart, List<IDiscountCoupon> coupons);
+        Task<IEnumerable<Discount>> GetAllActiveDiscounts();
+        Task<List<IDiscountCoupon>> GetAllDiscountCoupons();
+        Task ApplyDiscounts(CartModel cart, List<IDiscountCoupon> coupons);
     }
 }

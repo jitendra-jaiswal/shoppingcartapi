@@ -1,6 +1,6 @@
 ﻿namespace ShoppingCart.Domain.Responses
 {
-    public class CartModel
+    public class CartModel : Response
     {
         public List<CartItemModel> CartItems { get; set; } = new();
         public decimal TotalAmount { get; set; }

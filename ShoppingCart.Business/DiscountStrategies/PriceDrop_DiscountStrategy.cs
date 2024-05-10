@@ -2,11 +2,6 @@
 using ShoppingCart.Domain;
 using ShoppingCart.Domain.Responses;
 using ShoppingCart.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Business.DiscountStrategies
 {
@@ -47,7 +42,7 @@ namespace ShoppingCart.Business.DiscountStrategies
             }
             else
             {
-                result.DiscountAmount =this.FixedPrice == null? 0:  (cartItem.UnitPrice - this.FixedPrice.Value)* cartItem.Quantity;
+                result.DiscountAmount = this.FixedPrice == null ? 0 : (cartItem.UnitPrice - this.FixedPrice.Value) * cartItem.Quantity;
                 result.DiscountCode = this.DiscountCode;
                 result.OnProductCode = this.ProductCode;
             }

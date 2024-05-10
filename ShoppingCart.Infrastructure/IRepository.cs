@@ -9,14 +9,14 @@ namespace ShoppingCart.Infrastructure
 
         TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> filter = null);
 
-        int Insert(TEntity entity);
+        Task<int> Insert(TEntity entity);
 
-        int Update(TEntity entity);
+        Task<int> Update(TEntity entity);
 
-        int Remove(TEntity entity);
-        int Remove(object id);
+        Task<int> Remove(TEntity entity);
+        Task<int> Remove(object id);
 
-        int Save();
+        Task<int> Save();
 
     }
 

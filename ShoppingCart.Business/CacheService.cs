@@ -1,9 +1,4 @@
 ﻿using ShoppingCart.Business.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Business
 {
@@ -14,7 +9,7 @@ namespace ShoppingCart.Business
         List<IDiscountCoupon> GetDiscountCoupons();
         bool SetDiscountCoupons(List<IDiscountCoupon> coupons);
     }
-    public class CacheService: ICacheService
+    public class CacheService : ICacheService
     {
         Dictionary<string, string> keyValues;
         List<IDiscountCoupon> coupons;

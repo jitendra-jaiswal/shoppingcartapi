@@ -5,10 +5,10 @@ namespace ShoppingCart.Business.Interfaces
 {
     public interface ICartService
     {
-        Product GetProductfromDB(string productCode);
-        bool AddProductToCart(Product product, int userId, int quantity);
-        bool UpdateProductInCart(Product product, int userId, int quantity);
-        bool RemoveProductToCart(int userId, string productCode);
-        CartModel GetCart(int userId);
+        Task<Product> GetProductfromDB(string productCode);
+        Task<bool> AddProductToCart(Product product, int userId, int quantity);
+        Task<bool> UpdateProductInCart(Product product, int userId, int quantity);
+        Task<bool> RemoveProductToCart(int userId, string productCode);
+        Task<CartModel> GetCart(int userId);
     }
 }

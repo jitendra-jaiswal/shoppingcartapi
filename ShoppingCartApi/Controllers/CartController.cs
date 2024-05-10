@@ -4,7 +4,6 @@ using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.enums;
 using ShoppingCart.Domain.Models;
 using ShoppingCart.Domain.Responses;
-using ShoppingCart.Infrastructure;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,40 +26,50 @@ namespace ShoppingCartApi.Controllers
 
         // GET: api/<CartController>
         [HttpGet]
-        public CartModel Get()
+        public async Task<ActionResult<CartModel>> Get()
         {
-            Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
-            var cart = _cartService.GetCart(userid);
-            if (cart.CartItems.Any())
+            CartModel cart = new CartModel() { IsSuccess = true };
+            try
             {
-                var discounts = _discountService.GetAllDiscountCoupons();
-                if(discounts.Any())
+                Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
+                cart = await _cartService.GetCart(userid);
+                if (cart.CartItems.Any())
                 {
-                    _discountService.ApplyDiscounts(cart, discounts);
+                    var discounts = await _discountService.GetAllDiscountCoupons();
+                    if (discounts.Any())
+                    {
+                        await _discountService.ApplyDiscounts(cart, discounts);
+                    }
                 }
+                cart.TotalAmount = cart.CartItems.Sum(x => x.TotalAmountBeforeDiscount);
+                cart.TotalDiscount = cart.CartItems.Sum(x => x.Discount ?? 0);
+                cart.TotalNetAmount = cart.TotalAmount - cart.TotalDiscount;
+                return Ok(cart);
             }
-            cart.TotalAmount = cart.CartItems.Sum(x => x.TotalAmountBeforeDiscount);
-            cart.TotalDiscount = cart.CartItems.Sum(x => x.Discount ?? 0);
-            cart.TotalNetAmount = cart.TotalAmount - cart.TotalDiscount;
-            return cart;
+            catch (Exception ex)
+            {
+                cart.IsSuccess = false;
+                cart.ErrorMessage = ex.Message;
+            }
+            return StatusCode(500, cart);
         }
 
         // POST api/<CartController>
         [HttpPost]
-        public ActionResult<Response> Post([FromBody] ProductOrder order)
+        public async Task<ActionResult<Response>> Post([FromBody] ProductOrder order)
         {
             Response response = new() { IsSuccess = false };
             try
             {
                 Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
-                var product = _cartService.GetProductfromDB(order.ProductCode);
+                var product = await _cartService.GetProductfromDB(order.ProductCode);
                 if (product == null)
                 {
                     response.ErrorMessage = "Invalid Product";
                     return BadRequest(response);
                 }
 
-                if (_cartService.AddProductToCart(product, userid, order.Quantity))
+                if (await _cartService.AddProductToCart(product, userid, order.Quantity))
                 {
                     response.IsSuccess = true;
                     return Ok(response);
@@ -77,20 +86,20 @@ namespace ShoppingCartApi.Controllers
 
         // PUT api/<CartController>/5
         [HttpPut()]
-        public ActionResult<Response> Put([FromBody] ProductOrder order)
+        public async Task<ActionResult<Response>> Put([FromBody] ProductOrder order)
         {
             Response response = new() { IsSuccess = false };
             try
             {
                 Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
-                var product = _cartService.GetProductfromDB(order.ProductCode);
+                var product = await _cartService.GetProductfromDB(order.ProductCode);
                 if (product == null)
                 {
                     response.ErrorMessage = "Invalid Product";
                     return BadRequest(response);
                 }
 
-                if (_cartService.UpdateProductInCart(product, userid, order.Quantity))
+                if (await _cartService.UpdateProductInCart(product, userid, order.Quantity))
                 {
                     response.IsSuccess = true;
                     return Ok(response);
@@ -107,13 +116,13 @@ namespace ShoppingCartApi.Controllers
 
         // DELETE api/<CartController>/5
         [HttpDelete("{productid}")]
-        public ActionResult<Response> Delete(string productid)
+        public async Task<ActionResult<Response>> Delete(string productid)
         {
             Response response = new() { IsSuccess = false };
             try
             {
                 Int32.TryParse(this.HttpContext.Items["UserId"]?.ToString(), out int userid);
-                if (_cartService.RemoveProductToCart(userid, productid))
+                if (await _cartService.RemoveProductToCart(userid, productid))
                 {
                     response.IsSuccess = true;
                     return Ok(response);

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using ShoppingCart.Domain.enums;
-using ShoppingCart.Infrastructure;
 
 namespace ShoppingCart.Business.Attributes
 {
@@ -18,10 +17,10 @@ namespace ShoppingCart.Business.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var contextRole = context.HttpContext.Items["Role"];
-            if(!_role.ToString().Equals(contextRole))
+            if (!_role.ToString().Equals(contextRole))
             {
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
-            }            
+            }
         }
     }
 }
