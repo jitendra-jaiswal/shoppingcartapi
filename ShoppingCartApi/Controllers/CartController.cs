@@ -69,7 +69,7 @@ namespace ShoppingCartApi.Controllers
                     return BadRequest(response);
                 }
 
-                if (await _cartService.AddProductToCart(product, userid, order.Quantity))
+                if (await _cartService.UpdateProductInCart(product, userid, order.Quantity))
                 {
                     response.IsSuccess = true;
                     return Ok(response);

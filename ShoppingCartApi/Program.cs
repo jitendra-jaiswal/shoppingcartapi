@@ -20,6 +20,7 @@ builder.Services.AddTransient<IDiscountService, DiscountService>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddScoped<IDiscountCouponFactory, DiscountCouponFactory>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IProductsService, ProductsService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 
@@ -59,6 +60,12 @@ builder.Services.AddSwaggerGen(swagger =>
                 });
 });
 
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.WithOrigins("http://localhost:4200")
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,6 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("MyPolicy");
 app.UseMiddleware<AuthMiddleware>();
 app.UseAuthorization();
 
