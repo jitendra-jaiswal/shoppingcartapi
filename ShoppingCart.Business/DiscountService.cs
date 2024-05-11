@@ -33,14 +33,14 @@ namespace ShoppingCart.Business
         {
             DiscountModel discountModel = new();
             DateTime today = DateTime.Now;
-            var discount = _discountRepository.GetFirstOrDefault(x=> x.Id == id);
-            if(discount != null)
+            var discount = _discountRepository.GetFirstOrDefault(x => x.Id == id);
+            if (discount != null)
             {
                 discountModel = _mapper.Map<DiscountModel>(discount);
                 discountModel.discountDetail = JsonConvert.DeserializeObject<DiscountDetail>(discountModel.DetailsJson);
             }
             return await Task.FromResult(discountModel);
-            
+
         }
 
         public async Task<IEnumerable<DiscountModel>> GetAllActiveDiscounts(bool includeType = true)
@@ -187,7 +187,7 @@ namespace ShoppingCart.Business
             return discountCoupons;
         }
 
-        
+
         private async Task AppyDiscountonCartItems(CartModel cart, DiscountResult discount)
         {
             if (discount.DiscountAmount == 0)

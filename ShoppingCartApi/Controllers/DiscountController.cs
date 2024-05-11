@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShoppingCart.Business;
+using Newtonsoft.Json;
 using ShoppingCart.Business.Attributes;
 using ShoppingCart.Business.Interfaces;
 using ShoppingCart.Domain.enums;
-using ShoppingCart.Domain.Responses;
-using Newtonsoft.Json;
-using ShoppingCart.Domain;
 using ShoppingCart.Domain.Requests;
+using ShoppingCart.Domain.Responses;
 
 namespace ShoppingCartApi.Controllers
 {
