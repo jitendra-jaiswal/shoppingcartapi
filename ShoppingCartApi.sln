@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCartApi", "ShoppingCartApi\ShoppingCartApi.csproj", "{A0382E35-3633-4D29-A0A8-5D59652A1ED8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCartApi", "ShoppingCartApi\ShoppingCartApi.csproj", "{A0382E35-3633-4D29-A0A8-5D59652A1ED8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Infrastructure", "ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj", "{DBB4DF43-6574-4133-9C66-3A574085C007}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Infrastructure", "ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj", "{DBB4DF43-6574-4133-9C66-3A574085C007}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Domain", "ShoppingCart.Domain\ShoppingCart.Domain.csproj", "{8ED4B1A4-4F85-4D99-845A-387E7C989490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Domain", "ShoppingCart.Domain\ShoppingCart.Domain.csproj", "{8ED4B1A4-4F85-4D99-845A-387E7C989490}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Business", "ShoppingCart.Business\ShoppingCart.Business.csproj", "{94379D09-68C7-4719-B980-347ADC38DE23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Business", "ShoppingCart.Business\ShoppingCart.Business.csproj", "{94379D09-68C7-4719-B980-347ADC38DE23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Api.Tests", "ShoppingCart.Api.Tests\ShoppingCart.Api.Tests.csproj", "{3369F875-E34F-4B31-A73D-66400FEEF269}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{94379D09-68C7-4719-B980-347ADC38DE23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94379D09-68C7-4719-B980-347ADC38DE23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94379D09-68C7-4719-B980-347ADC38DE23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3369F875-E34F-4B31-A73D-66400FEEF269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3369F875-E34F-4B31-A73D-66400FEEF269}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3369F875-E34F-4B31-A73D-66400FEEF269}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3369F875-E34F-4B31-A73D-66400FEEF269}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

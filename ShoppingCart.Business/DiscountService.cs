@@ -122,22 +122,31 @@ namespace ShoppingCart.Business
 
         public bool AddDiscount(AddDiscountModel model)
         {
-            Discount discount = new Discount
+            try
             {
-                Name = model.Name,
-                Type = model.Type,
-                IsActive = model.IsActive,
-                CreatedDate = DateTime.Now,
-                ExpiryDate = model.ExpiryDate,
-                DetailsJson = JsonConvert.SerializeObject(model.DiscountDetail)
-            };
+                Discount discount = new Discount
+                {
+                    Name = model.Name,
+                    Type = model.Type,
+                    IsActive = model.IsActive,
+                    CreatedDate = DateTime.Now,
+                    ExpiryDate = model.ExpiryDate,
+                    DetailsJson = JsonConvert.SerializeObject(model.DiscountDetail)
+                };
 
-            _discountRepository.Insert(discount);
-            var config = _configRepository.GetFirstOrDefault(x => x.Key == "DiscountSetDate");
-            config.Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            _configRepository.Update(config);
+                _discountRepository.Insert(discount);
+                var config = _configRepository.GetFirstOrDefault(x => x.Key == "DiscountSetDate");
+                config.Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                _configRepository.Update(config);
 
-            return true;
+                return true;
+            }
+            catch (Exception e)
+            {
+                // Log Exception
+                return false;
+            }
+
         }
 
         #region private 

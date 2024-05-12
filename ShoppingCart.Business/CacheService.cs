@@ -33,6 +33,9 @@ namespace ShoppingCart.Business
 
         public bool SetCacheValue(string key, string value)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                return false;
+
             keyValues[key] = value;
             return true;
         }
